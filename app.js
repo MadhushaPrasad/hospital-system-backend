@@ -2,8 +2,8 @@ const express = require('express');
 const createError = require('http-errors');
 const morgan = require('morgan');
 require('dotenv').config();
-
 const db = require('./src/config/db.config');
+const routes = require('./src/routes/index');
 
 db.connect((err) => {
   if (err) {
@@ -17,11 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
-app.get('/', async (req, res, next) => {
-  res.send({ message: 'Awesome it works 🐻' });
-});
-
-app.use('/api', require('./src/routes/api.route'));
+app.use('/api', routes);
 
 app.use((req, res, next) => {
   next(createError.NotFound());
